@@ -5,6 +5,8 @@ import sudProject.map.Room;
 import sudProject.entities.Player;
 import sudProject.entities.npcTypes.CanNotBeAttackedNpc;
 
+import static sudProject.entities.Player.mapFrame;
+
 public class MoonPriest extends CanNotBeAttackedNpc {
 
 
@@ -26,7 +28,7 @@ public class MoonPriest extends CanNotBeAttackedNpc {
                 do{
                     //aumenta statistiche
                     MapFrame.setLog("Scegli la statistica da aumentare: (STRENGTH) (DEXTERITY) (CONSTITUTION) (INTELLIGENCE) (WISDOM) (CHARISMA)\n");
-                    switch(console.readLine().toUpperCase()){
+                    switch(mapFrame.readInput().toUpperCase().trim()){
                         case "STRENGTH":
                             if(player.getStrength() != MAX_ATTRIBUTE_P_VALUE-1){
                                 player.setStrength(player.getStrength()+1);

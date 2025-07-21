@@ -55,7 +55,7 @@ public class Player extends Entity{
     public void playerMove() {
         MapFrame.setLog("Dove vuoi andare? : (NORTH) (SOUTH) (EAST) (WEST)\n");
         boolean directionSwitch = false;
-        String direction = console.readLine();
+        String direction = mapFrame.readInput();
         switch (direction.toUpperCase().trim()) {
             case "NORTH":
                 if (playerPosition.getNorthRoom() != null) {
@@ -131,7 +131,7 @@ public class Player extends Entity{
     public void buy(Npc seller){
         MapFrame.setLog(seller.getEntityInventory().showItemsInInventory());
         MapFrame.appendToLog("SELECT ITEM TO BUY:\n");
-        String input = console.readLine();
+        String input = mapFrame.readInput().toUpperCase();
 
         Item item = seller.getEntityInventory().viewItemFromInventory(input);
 
@@ -147,7 +147,7 @@ public class Player extends Entity{
 
     public void pickFromCorpse(Room room){
         MapFrame.setLog("SELECT CORPSE:\n");
-        String input = console.readLine().trim().toUpperCase();
+        String input = mapFrame.readInput().toUpperCase();
         int result = room.getCorpseIndex(input);
         if(result != -1){
             //se ha trovato il cadavere
@@ -199,7 +199,7 @@ public class Player extends Entity{
     public void equip(Item item){
         MapFrame.setLog("Scegli dove equipaggiare l'item:\n");
         MapFrame.appendToLog(playerEquipment.showEquip());
-        String input = console.readLine().toUpperCase().trim();
+        String input = mapFrame.readInput().toUpperCase().trim();
         switch(input){
             case "LEFTHAND":
                 if(item instanceof Weapon && playerEquipment.getLeftHand() == null){
@@ -226,7 +226,7 @@ public class Player extends Entity{
     public void removeFromEquipment(){
         MapFrame.setLog("Seleziona la parte dell'equipaggiamento da togliere:\n");
         MapFrame.appendToLog(playerEquipment.showEquip());
-        String input = console.readLine().toUpperCase().trim();
+        String input = mapFrame.readInput().toUpperCase().trim();
         switch(input){
             case "HEAD":
                 if(playerEquipment.getHead() != null){
@@ -292,11 +292,11 @@ public class Player extends Entity{
     public void openInventory(){
         MapFrame.setLog(entityInventory.showItemsInInventory());
         MapFrame.appendToLog("Seleziona l'oggetto con cui interagire: (Nome oggetto)\n");
-        String input = console.readLine();
+        String input = mapFrame.readInput();
         Item item = entityInventory.viewItemFromInventory(input);
         if(item != null){
             MapFrame.appendToLog("Seleziona l'azione da compiere: (DROP) (EAT) (EQUIP) (DESCRIPTION)\n");
-            String input2 = console.readLine().trim().toUpperCase();
+            String input2 = mapFrame.readInput().toUpperCase().trim();
             switch (input2){
                 case "DROP" -> dropItemFromInventory(entityInventory, item);
                 case "EAT" -> eat(item);
@@ -311,7 +311,7 @@ public class Player extends Entity{
 
     private Item selectItemFromInventory(Inventory inventory){
         MapFrame.appendToLog("Seleziona l'oggetto:\n");
-        String input = console.readLine();
+        String input = mapFrame.readInput();
         Item i = inventory.getItemFromInventory(input);
         return i;
     }

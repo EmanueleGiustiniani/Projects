@@ -21,6 +21,9 @@ public class MapFrame extends JFrame {
     private JLabel nameLabel, lvlLabel, hpLabel, xpLabel, atkLabel, moneyLabel;
     private JLabel strLabel, dexLabel, conLabel, intLabel, wisLabel, chaLabel;
 
+    private JTextField inputField;
+    private String latestInput = null;
+
     public MapFrame() {
         setTitle("Mappa");
         setSize(1280, 920);
@@ -94,15 +97,34 @@ public class MapFrame extends JFrame {
         rightPanel.add(tablePanel, BorderLayout.NORTH);
         rightPanel.add(playerStatsPanel, BorderLayout.CENTER);
 
+        inputField = new JTextField();
+        inputField.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        inputField.addActionListener(e -> {
+            synchronized (this) {
+                latestInput = inputField.getText();
+                inputField.setText("");
+                notify(); // notifica chi sta aspettando l'input
+            }
+        });
+
+        JPanel inputPanel = new JPanel(new BorderLayout());
+        inputPanel.add(new JLabel("Input: "), BorderLayout.WEST);
+        inputPanel.add(inputField, BorderLayout.CENTER);
+
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.add(scrollPane, BorderLayout.CENTER);
+        bottomPanel.add(inputPanel, BorderLayout.SOUTH);
+
         // Layout principale
         setLayout(new BorderLayout());
         add(mapPanel, BorderLayout.CENTER);
-        add(scrollPane, BorderLayout.SOUTH);
+        add(bottomPanel, BorderLayout.SOUTH);
         add(rightPanel, BorderLayout.EAST);
 
         updateColorTheme();
 
         setVisible(true);
+        inputField.requestFocusInWindow();
     }
 
     // Cambia dinamicamente il tema in base a TimePhase
@@ -151,6 +173,18 @@ public class MapFrame extends JFrame {
     public void updateMap(String mapText) {
         mapPanel.setMapText(mapText);
         updateColorTheme(); // Aggiorna anche i colori
+    }
+
+    public synchronized String readInput() {
+        latestInput = null;
+        try {
+            while (latestInput == null) {
+                wait(); // aspetta finché l'utente non preme Invio
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return latestInput.trim();
     }
 
     public void updateTime(String timeText) {

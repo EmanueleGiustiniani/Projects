@@ -41,8 +41,6 @@ public abstract class Entity {
     private int charisma;
 
     public static Random dice = new Random();
-    public Console console = System.console();
-
 
     public static int numberOfEntities;
     private Room entityPosition;

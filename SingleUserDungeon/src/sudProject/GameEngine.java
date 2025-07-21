@@ -22,7 +22,6 @@ public class GameEngine {
     static{
         boolean endGame = false;
         boolean exit = false;
-        Console console = System.console();
         PlayerCreator playerCreator = new PlayerCreator();
         WorldMap worldMap = new WorldMap();
         TimeHandler timeHandler = new TimeHandler();
@@ -50,7 +49,7 @@ public class GameEngine {
                         "Seleziona l'azione da compiere: ";
                 MapFrame.appendToLog(actionsString);
 
-                input = console.readLine().toUpperCase().trim();
+                input = mapFrame.readInput().toUpperCase();
                 for (Controls c : controls) {
                     if (input.equals(c.getValue())) {
                         checkInput = true;
@@ -71,7 +70,7 @@ public class GameEngine {
                         MapFrame.appendToLog("Seleziona il bersaglio:");
                         //mostra i bersagli
                         mapFrame.updateEntities(player.getPlayerPosition().getEntitiesText());
-                        String targetSelected = console.readLine();
+                        String targetSelected = mapFrame.readInput().toUpperCase();
                         Entity target = (Entity) switch (targetSelected.trim().toUpperCase()) {
                             case "CAT" ->
                                     !player.getPlayerPosition().getRoomEntities().get(CAT_INDEX).isEmpty() && player.getPlayerPosition().getRoomEntities().get(GUARD_INDEX).isEmpty() ?
@@ -102,7 +101,7 @@ public class GameEngine {
                         boolean actionIsSelected = false;
                         do {
                             MapFrame.setLog("Seleziona l'azione da compiere: (ATTACK) (ESCAPE) ");
-                            input = console.readLine().trim().toUpperCase();
+                            input = mapFrame.readInput().toUpperCase();
                             for (Controls c : fightControls) {
                                 if (input.equals(c.getValue())) {
                                     actionIsSelected = true;
